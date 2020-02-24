@@ -1,59 +1,61 @@
 import java.net.*;
-import java.util.Scanner;
+import java.util.*;
 import java.io.*;
+import java.util.logging.*;
+import java.lang.*;
 
-public class Client {
-	public static void main(String[] args) throws IOException {
+public class Client extends Thread{
+	private static Socket sock;
+	private BufferedReader readIn;
+	private DataOutputStream sendOut;
+	private static String address;
+	private static int port;
+	private static String command = "manual";
+	private static long totalFinalTime = 0;
+	
+	public Client(String address, int port, String s) {
+		Client.address = address;
+		Client.port = port;
+		Client.command = s; 
+	}
+	
+	public static void main(String[] args) throws UnknownHostException, IOException {
+		Scanner sc1 = new Scanner(sock.getInputStream());
 		Scanner scanner = new Scanner(System.in);
 		
 		System.out.println("Enter Hostname: ");
-		String hostname = scanner.next(args[0]);
+		address = scanner.next(args[0]);
 		
 		System.out.println("Enter Port: ");
-		int port = Integer.parseInt(args[1]);
+		port = Integer.parseInt(args[1]);
 		
+		int threadCount;
+		int check = -1; 
+		
+		Client thread; 
+
 		try { 
-			
-			System.out.println("enter number of client requests: ");
-			int clients = scanner.nextInt(); 
-			
-			for(int i = 0; i < clients; i++) {
-				Socket socket = new Socket(hostname, port);
-				DataInputStream dis = new DataInputStream(socket.getInputStream()); 
-				DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-				Thread t = new ClientThread(socket, dis, dos);
-				t.start();
-			}
-			
-			
+			System.out.println("Connecting to Server");
+			thread = new Client(address, port, "manual");
+			thread.start();
+			thread.join();
+			System.out.println("Now connected to Server"); 	
 		}catch(Exception e) {
+			System.out.print("connection failed");
 			e.printStackTrace(); 
-		}
-	}
-
-}
-
-class ClientThread extends Thread {
-	
-	final DataInputStream dis; 
-	final DataOutputStream dos; 
-	final Socket socket;
-	
-	public ClientThread(Socket socket, DataInputStream dis, DataOutputStream dos) {
-		this.socket = socket;
-		this.dis = dis; 
-		this.dos = dos; 
-	}
-	
-	@Override
-	public void run(){
-		while(true) {
-			try {
-				
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
+			return;
 		}
 		
+		while(!command.equals("quit")) {
+			
+			System.out.println("Please Enter command, or manual for options or quit");
+			command = scanner.next();
+			if (command.contentEquals("quit")){
+				System.out.println("Ending Connection");
+				System.exit(0);
+			}
+		}
 	}
+
 }
+
