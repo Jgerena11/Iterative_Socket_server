@@ -23,16 +23,20 @@ public class Client extends Thread {
 		Client.command = s; 
 	}
 	
-	public Client(String address, int port) throws UnknownHostException, IOException {
-		sock = new Socket(address, port);
-		sc1 = new Scanner(sock.getInputStream());
-		p = new PrintStream(sock.getOutputStream());
-		Client.address = address; 
-		Client.port = port;
-	}
-	
+//	public Client(String address, int port) throws UnknownHostException, IOException {
+//		sock = new Socket(address, port);
+//		sc1 = new Scanner(sock.getInputStream());
+//		p = new PrintStream(sock.getOutputStream());
+//		Client.address = address; 
+//		Client.port = port;
+//	}
+//	
 	public void run() {
+		this.p.print(command);
 		
+		while (sc1.hasNext()){
+			System.out.println(sc1.nextLine());
+		}
 	}
 	
 	public static void main(String[] args) throws UnknownHostException, IOException {
