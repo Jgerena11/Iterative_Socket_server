@@ -8,10 +8,12 @@ public class Client extends Thread{
 	private Socket sock;
 	private BufferedReader readIn;
 	private DataOutputStream sendOut;
+
 	private static String address;
 	private static int port;
 	private static int threadCount;
 	private static String command = "manual";
+
 	private static double totalFinalTime = 0;
 	
 	public Client(String add, int pot, String comm) throws UnknownHostException, IOException {
@@ -29,6 +31,7 @@ public class Client extends Thread{
 			g.println(command);
 			double start = System.currentTimeMillis();
 	
+
 			if (B.hasNext()) {
 				double end = System.currentTimeMillis();
 				double elapsedTime = end - start;
@@ -111,7 +114,6 @@ public class Client extends Thread{
 				System.exit(0);
 			}
 			
-			
 			for(int i = 0; i<threadCount; i++) {
 				threads[i] = new Client(address, port, command);
 			}
@@ -137,8 +139,6 @@ public class Client extends Thread{
 
 			for(int i = 0; i < threadCount; i++) 
 				threads[i] = null;
-
-
 		}
 		sc.close();
 	
