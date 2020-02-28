@@ -28,7 +28,7 @@ public class Client extends Thread{
 			PrintStream g = new PrintStream(m.getOutputStream());
 			g.println(command);
 			double start = System.currentTimeMillis();
-			System.out.println(command);
+	
 			if (B.hasNext()) {
 				double end = System.currentTimeMillis();
 				double elapsedTime = end - start;
@@ -132,7 +132,7 @@ public class Client extends Thread{
 
 
 			System.out.println("\n ***Thread: " + threadCount + ";command: " + command +";Average time in milliseconds: " + totalFinalTime/threadCount + "***\n\n");
-			System.out.print("Thread: " + threadCount + ";command: " + command +";Average time in milliseconds: " + totalFinalTime/threadCount+"\n");
+			System.out.print("Total turn around time in milliseconds: " + totalFinalTime+"\n");
 			totalFinalTime = 0;
 
 			for(int i = 0; i < threadCount; i++) 

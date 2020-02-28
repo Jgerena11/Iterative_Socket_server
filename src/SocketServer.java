@@ -28,9 +28,11 @@ while(true) {
 			
 			switch(choice) {
 			case "1":
-			  LocalDate myObj = LocalDate.now();
-			  System.out.println(myObj);
-			  p.println(myObj);
+			  Process c1 = Runtime.getRuntime().exec("date");
+			  BufferedReader c = new BufferedReader(new InputStreamReader(c1.getInputStream()));
+			  String result = c.readLine();
+			  System.out.println(result);
+			  p.println(result);
 				
 				p.flush();
 				break;
