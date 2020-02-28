@@ -8,12 +8,11 @@ public class Client extends Thread{
 	private Socket sock;
 	private BufferedReader readIn;
 	private DataOutputStream sendOut;
-
 	private static String address;
 	private static int port;
 	private static int threadCount;
 	private static String command = "manual";
-
+	private static double elapsedTime = 0;
 	private static double totalFinalTime = 0;
 	
 	public Client(String add, int pot, String comm) throws UnknownHostException, IOException {
@@ -23,7 +22,6 @@ public class Client extends Thread{
 	}
 	public void run() {
 		
-		
 		try {
 			Socket m = new Socket(address, port);
 			Scanner B = new Scanner(m.getInputStream());
@@ -31,14 +29,13 @@ public class Client extends Thread{
 			g.println(command);
 			double start = System.currentTimeMillis();
 	
-
 			if (B.hasNext()) {
 				double end = System.currentTimeMillis();
-				double elapsedTime = end - start;
+				elapsedTime = end - start;
 				totalFinalTime += elapsedTime;
 			}
+			
 			if(command == "1") {
-				System.out.println("command 1 inputed");
 				System.out.println(B.next());
 			}else {
 				while(B.hasNext() && B.next() !=null) {	
@@ -50,6 +47,7 @@ public class Client extends Thread{
 				m.close();
 		
 			}
+			if(command != "manual") System.out.println("Turn Around Time: " + elapsedTime);
 		}catch(IOException ee) {}
 	
 	
@@ -87,20 +85,19 @@ public class Client extends Thread{
 		}
 		
 		while (!command.equals("quit")){
-			
-			System.out.println("How many Jawns do you wanna spawn?");
-			threadCount = sc.nextInt();
+			totalFinalTime = 0;
+			System.out.println("\nHow many Clients would you like to spawn?");
+			//String threadCountInput = sc.next();
 	
 			do {
-				try {
-					if(check!=0){
-						System.out.println("please enter a number 1 or greater");
-						check++;
-					}
-				}catch(InputMismatchException mm){
-					System.out.println("Please enter a valid number");
+				try { 
+					threadCount = Integer.parseInt(sc.next());
+				}catch(NumberFormatException nfe){
+					System.out.println("Please enter an integer");
 					threadCount = -1;
-					sc.next();
+				}
+				if(threadCount <= 0){
+					System.out.println("please enter a number 1 or greater");
 				}
 			}
 		
@@ -118,7 +115,7 @@ public class Client extends Thread{
 				threads[i] = new Client(address, port, command);
 			}
 
-			System.out.print("Running " + threadCount + " threads for command: " + command);
+			System.out.print("Running " + threadCount + " threads for command: " + command + "\n");
 
 			for (int i = 0; i < threadCount; i++){
 				threads[i].run();
@@ -133,7 +130,8 @@ public class Client extends Thread{
 			}
 
 
-			System.out.println("\n ***Thread: " + threadCount + ";command: " + command +";Average time in milliseconds: " + totalFinalTime/threadCount + "***\n\n");
+			System.out.println("\n ***Thread: " + threadCount + "; command: " + command);
+			System.out.println("Average time in milliseconds: " + totalFinalTime/threadCount + "***\n\n");
 			System.out.print("Total turn around time in milliseconds: " + totalFinalTime+"\n");
 			totalFinalTime = 0;
 
